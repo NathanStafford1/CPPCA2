@@ -39,6 +39,23 @@ bool Image::load(string filename)
 }
 bool Image::loadRaw(string filename)
 {
+    ifstream ifs(filename);
+    if (ifs.good())
+    {
+        ifs >> this->w;
+        ifs >> this->h;
+        for (int i = 0; i < w*h; ++i)
+        {
+            float r,g,b;
+            ifs >> r >> g >> b;
+            pixels[i].r = r*255;
+            pixels[i].g = g*255;
+            pixels[i].b = b*255;
+            cout << r << pixels[i].r << endl;
+        }
+        ifs.close();
+        return true;
+    }
     return false;
 }
 bool Image::savePPM(string filename)
@@ -99,6 +116,7 @@ void Image::greyScale()
     for (int i = 0; i < w*h; i++)
     {
         unsigned char temp = ((this->pixels[i].r) + (this->pixels[i].g) + (this->pixels[i].b))/3;
+
         this->pixels[i].r = temp;
         this->pixels[i].g = temp;
         this->pixels[i].b = temp;
@@ -106,20 +124,39 @@ void Image::greyScale()
 }
 void Image::flipHorizontal()
 {
-        Rgb tmp;
-        for (int y = 0; y < h; y++)
-            for (int x = 0; x < w; x++)
-            {
-                tmp = pixels[x];
-                pixels[x] = pixels[w-x];
-                pixels[w-x]=tmp;
-            }
+        unsigned int pixel1;
+        unsigned int pixel2;
 
+        for (int y = 0; y < h; y++)
+        {
+            for (int x = 0; x < w / 2; x++)
+            {
+                pixel1 = x + y * w;
+                pixel2 = (w - 1 - x) + y * w;
+
+                swap(this->pixels[pixel1].r,this->pixels[pixel2].r);
+                swap(this->pixels[pixel1].g,this->pixels[pixel2].g);
+                swap(this->pixels[pixel1].b,this->pixels[pixel2].b);
+            }
+        }
 }
 void Image::flipVertically()
 {
+    unsigned int pixel1;
+    unsigned int pixel2;
 
+    for (int x = 0; x < w; x++)
+    {
+        for (int y = 0; y < h / 2; y++)
+        {
+            pixel1 = x + y * w;
+            pixel2 = x + (h -1 - y) * w;
 
+            swap(this->pixels[pixel1].r,this->pixels[pixel2].r);
+            swap(this->pixels[pixel1].g,this->pixels[pixel2].g);
+            swap(this->pixels[pixel1].b,this->pixels[pixel2].b);
+        }
+    }
 }
 void Image::AdditionalFunction2()
 {
