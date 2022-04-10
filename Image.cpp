@@ -43,7 +43,29 @@ bool Image::loadRaw(string filename)
 }
 bool Image::savePPM(string filename)
 {
-
+    if (w == 0 || h == 0)
+    {
+        fprintf(stderr, "Can't save without an image!\n");
+        return false;
+    }
+    std::ofstream ofs;
+    try {
+        ofs.open(filename, std::ios::binary);
+        if (ofs.fail()) throw("Can't open file");
+        ofs << "P6\n" << w << " " << h << "\n255\n";
+        unsigned char pix[3];
+        for (int i = 0; i < w * h; ++i) {
+            pix[0] = static_cast<unsigned char>(this->pixels[i].r);
+            pix[1] = static_cast<unsigned char>(this->pixels[i].g);
+            pix[2] = static_cast<unsigned char>(this->pixels[i].b);
+            ofs.write(reinterpret_cast<char *>(pix), 3);
+        }
+        ofs.close();
+    }
+    catch (const char *err) {
+        fprintf(stderr, "%s\n", err);
+        ofs.close();
+    }
     return false;
 }
 
@@ -84,7 +106,14 @@ void Image::greyScale()
 }
 void Image::flipHorizontal()
 {
-
+        Rgb tmp;
+        for (int y = 0; y < h; y++)
+            for (int x = 0; x < w; x++)
+            {
+                tmp = pixels[x];
+                pixels[x] = pixels[w-x];
+                pixels[w-x]=tmp;
+            }
 
 }
 void Image::flipVertically()
