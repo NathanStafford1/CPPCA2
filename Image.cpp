@@ -43,6 +43,7 @@ bool Image::loadRaw(string filename)
 }
 bool Image::savePPM(string filename)
 {
+
     return false;
 }
 
@@ -73,16 +74,12 @@ void Image::filterBlue()
 }
 void Image::greyScale()
 {
-    const float r = 0.299F;
-    const float g = 0.587F;
-    const float b = 0.114F;
-
-    int size = this->w * this->h * 3;
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < w*h; i++)
     {
-        this->pixels[i] = (this->pixels[i].r) + (this->pixels[i].g) + (this->pixels[i].b);
-        this->pixels[i+1] = (this->pixels[i+1].r) + (this->pixels[i+1].g) + (this->pixels[i+1].b);
-        this->pixels[i+2] = (this->pixels[i+2].r) + (this->pixels[i+2].g) + (this->pixels[i+2].b);
+        unsigned char temp = ((this->pixels[i].r) + (this->pixels[i].g) + (this->pixels[i].b))/3;
+        this->pixels[i].r = temp;
+        this->pixels[i].g = temp;
+        this->pixels[i].b = temp;
     }
 }
 void Image::flipHorizontal()
