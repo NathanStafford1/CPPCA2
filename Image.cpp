@@ -113,7 +113,8 @@ void Image::filterBlue()
 }
 void Image::greyScale()
 {
-    for (int i = 0; i < w*h; i++)
+    //Greyscale assistance reference https://stackoverflow.com/questions/28923676/convert-ppm-image-to-greyscale-c
+    for (int i = 0; i < h*w; i++)
     {
         unsigned char temp = ((this->pixels[i].r) + (this->pixels[i].g) + (this->pixels[i].b))/3;
 
@@ -160,7 +161,25 @@ void Image::flipVertically()
 }
 void Image::AdditionalFunction2()
 {
+    unsigned int pixel1;
+    unsigned int pixel2;
 
+    for (int y = 0; y < h; ++y)
+    {
+        for (int x = 0; x < w; ++x)
+        {
+            for (int c = 0; c < 3; ++c)
+            {
+                pixel1 = (y*w+x)*3+c;
+                pixel2 = (y*w+(w-x))*3+c;
+
+                swap(this->pixels[pixel1].r,this->pixels[pixel2].r);
+                swap(this->pixels[pixel1].g,this->pixels[pixel2].g);
+                swap(this->pixels[pixel1].b,this->pixels[pixel2].b);
+
+            }
+        }
+    }
 }
 void Image::AdditionalFunction3()
 {
@@ -168,7 +187,13 @@ void Image::AdditionalFunction3()
 }
 void Image::AdditionalFunction1()
 {
-
+    //Inverting image color
+    for (int i = 0; i < w*h; ++i)
+    {
+        this->pixels[i].r = 255 - pixels[i].r;
+        this->pixels[i].g = 255 - pixels[i].g;
+        this->pixels[i].b = 255 - pixels[i].b;
+    }
 }
 
 /* Functions used by the GUI - DO NOT MODIFY */
