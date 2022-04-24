@@ -161,29 +161,38 @@ void Image::flipVertically()
 }
 void Image::AdditionalFunction2()
 {
-    unsigned int pixel1;
-    unsigned int pixel2;
-
-    for (int y = 0; y < h; ++y)
+    //Darkens the image
+    for(int i = 0; i < w*h; i++)
     {
-        for (int x = 0; x < w; ++x)
-        {
-            for (int c = 0; c < 3; ++c)
-            {
-                pixel1 = (y*w+x)*3+c;
-                pixel2 = (y*w+(w-x))*3+c;
-
-                swap(this->pixels[pixel1].r,this->pixels[pixel2].r);
-                swap(this->pixels[pixel1].g,this->pixels[pixel2].g);
-                swap(this->pixels[pixel1].b,this->pixels[pixel2].b);
-
-            }
-        }
+        this->pixels[i].r *= 0.5;
+        this->pixels[i].g *= 0.5;
+        this->pixels[i].b *= 0.5;
     }
 }
 void Image::AdditionalFunction3()
 {
-
+    //Randomly swaps the RGB colors
+    for (int i = 0; i < w*h; ++i)
+    {
+        if (rand() % 100 <= 30)
+        {
+            this->pixels[i].r = this->pixels[i].g;
+            this->pixels[i].g = this->pixels[i].b;
+            this->pixels[i].b = this->pixels[i].r;
+        }
+        else if (rand() % 100 <=50 && rand() % 100 >= 30)
+        {
+            this->pixels[i].r = this->pixels[i].r;
+            this->pixels[i].g = this->pixels[i].g;
+            this->pixels[i].b = this->pixels[i].b;
+        }
+        else if (rand() % 100 >=70)
+        {
+            this->pixels[i].r = this->pixels[i].b;
+            this->pixels[i].g = this->pixels[i].g;
+            this->pixels[i].b = this->pixels[i].r;
+        }
+    }
 }
 void Image::AdditionalFunction1()
 {
