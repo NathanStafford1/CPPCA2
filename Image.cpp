@@ -1,13 +1,10 @@
-//
-// Created by floodd on 23/03/2022.
-//
+
 #include <iostream>
 #include <fstream>
 #include <iomanip>
 #include <cstring>
+#include <valarray>
 #include "Image.h"
-
-
 
 bool Image::load(string filename)
 {
@@ -48,9 +45,9 @@ bool Image::loadRaw(string filename)
         {
             float r,g,b;
             ifs >> r >> g >> b;
-            pixels[i].r = r*255;
-            pixels[i].g = g*255;
-            pixels[i].b = b*255;
+            pixels[i].r = pow(r , 1/2.2) * 255;
+            pixels[i].g = pow(g , 1/2.2) * 255;
+            pixels[i].b = pow(b , 1/2.2) * 255;
             cout << r << pixels[i].r << endl;
         }
         ifs.close();
@@ -205,6 +202,25 @@ void Image::AdditionalFunction1()
     }
 }
 
+void Image::AdditionalFunction4()
+{
+    //Rotate by 90 degree clockwise
+    Rgb *tempRGB= new Rgb[w*h];
+
+    for(int y =0; y < h; y++)
+    {
+        for(int x = 0; x < w;x++)
+        {
+            int rotationpixels = ((x * h) + (h - y -1));
+
+            tempRGB[rotationpixels] = pixels[y*w+x];
+        }
+    }
+    pixels = tempRGB;
+    int newW= w;
+    w = h;
+    h = newW;
+}
 /* Functions used by the GUI - DO NOT MODIFY */
 int Image::getWidth()
 {
